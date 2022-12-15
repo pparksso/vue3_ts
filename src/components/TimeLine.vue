@@ -4,14 +4,11 @@ import {TimelinePost, today, thisMonth, thisWeek} from '../posts'
 import { DateTime } from 'luxon'
 import TimeLineItem from './TimeLineItem.vue';
 import {usePosts} from '../store/posts'
+import {periods, Period} from "../constants"
 
 const postsStore = usePosts()
 
-const periods = ['Today', 'This Week', 'This Month']as const
-type Period = typeof periods[number]
-
 const selectedPeriod = ref<Period>('Today');
-
 function selectPeriod(period: Period) {
   selectedPeriod.value = period
 }

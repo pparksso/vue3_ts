@@ -1,0 +1,4 @@
+
+<template>
+  New Post
+</template>

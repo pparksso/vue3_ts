@@ -1,11 +1,33 @@
 <script setup lang="ts">
+import { ref, computed } from "vue";
 import Navbar from "./components/Navbar.vue";
+import FormInput from "./components/FormInput.vue";
+import { useModal } from "./composables/modal";
+
+const modal = useModal();
+
+const modalStyle = computed(() => {
+  return {
+    display: modal.show.value ? "block" : "none",
+  };
+});
+const username = ref("");
 </script>
 <template>
+  <div class="modal" style="color: white" :style="modalStyle">
+    <div class="modal-background">
+      <div class="modal-content">
+        <div id="modal"></div>
+      </div>
+    </div>
+    <button class="modal-close is-large" @click="modal.hideModal()"></button>
+  </div>
   <div class="section">
     <div class="container">
+      <FormInput name="Username" v-model="username" />
       <Navbar />
       <router-view />
+      {{ username }}
     </div>
   </div>
 </template>

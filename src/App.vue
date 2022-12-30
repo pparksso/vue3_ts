@@ -2,14 +2,19 @@
 import { computed } from "vue";
 import Navbar from "./components/Navbar.vue";
 import { useModal } from "./composables/modal";
+import { useUser } from "./store/users";
 
 const modal = useModal();
+const userStore = useUser();
 
 const modalStyle = computed(() => {
   return {
     display: modal.show.value ? "block" : "none",
   };
 });
+
+//인증 처리
+userStore.authenticate();
 </script>
 <template>
   <div class="modal" style="color: white" :style="modalStyle">

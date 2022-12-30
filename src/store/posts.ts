@@ -24,7 +24,7 @@ export const usePosts = defineStore("posts", {
       this.selectedPeriod = period;
     },
     async fetchPosts() {
-      const res = await window.fetch("http://localhost:8000/posts");
+      const res = await window.fetch("/api/posts");
       const data = (await res.json()) as Post[];
       await delay();
 
@@ -39,7 +39,7 @@ export const usePosts = defineStore("posts", {
     },
     async createPost(post: TimelinePost) {
       const body = JSON.stringify({ ...post, created: post.created.toISO() });
-      return window.fetch("http://localhost:8000/posts", {
+      return window.fetch("/api/posts", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

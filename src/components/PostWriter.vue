@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
-import { TimelinePost } from "../posts";
+import { Post, TimelinePost } from "../posts";
 import { useRouter } from "vue-router";
 import { marked } from "marked";
 import highlightjs from "highlight.js";
 import debounce from "lodash/debounce";
 import { usePosts } from "../store/posts";
+import { useUser } from "../store/users";
 
 const router = useRouter();
 const posts = usePosts();
+const userStore = useUser();
+
 const props = defineProps<{
-  post: TimelinePost;
+  post: TimelinePost | Post;
+}>();
+
+const emit = defineEmits<{
+  (event: "submit", post: Post): void;
 }>();
 
 const title = ref(props.post.title);
@@ -41,8 +48,6 @@ watch(
   }, 250),
   { immediate: true }
 );
-// 위와 같음(리팩토링 but 가독성 떨어짐)
-// watch(content, debounce(parseHtml, 250), { immediate: true });
 
 onMounted(() => {
   if (!contentEditable.value) {
@@ -57,14 +62,18 @@ function handleInput() {
   content.value = contentEditable.value.innerText;
 }
 async function handleClick() {
-  const newPost: TimelinePost = {
+  if (!userStore.currentUserId) {
+    throw Error("User was not found");
+  }
+  const newPost: Post = {
     ...props.post,
+    created: typeof props.post.created === "string" ? props.post.created : props.post.created.toISO(),
     title: title.value,
+    authorId: userStore.currentUserId,
     markdown: content.value,
     html: html.value,
   };
-  await posts.createPost(newPost);
-  router.push("/");
+  emit("submit", newPost);
 }
 </script>
 <template>

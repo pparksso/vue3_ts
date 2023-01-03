@@ -40,8 +40,8 @@ const isInvalid = computed(() => {
 </script>
 <template>
   <form class="form" @submit.prevent="handleSubmit">
-    <FormInput name="Username" v-model="username" :status="usernameStatus" type="text" />
-    <FormInput name="Password" v-model="password" :status="passwordStatus" type="password" />
+    <FormInput data-testid="username" name="Username" v-model="username" :status="usernameStatus" type="text" />
+    <FormInput data-testid="password" name="Password" v-model="password" :status="passwordStatus" type="password" />
     <div v-if="error" class="is-danger help" style="margin-bottom: 10px">{{ error }}</div>
     <button class="button" :disabled="isInvalid">Submit</button>
   </form>
